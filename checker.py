@@ -2,7 +2,8 @@ import os
 from dotenv import load_dotenv , find_dotenv , dotenv_values
 
 
-secret = ['password','token','key','pwd','secret','key','private','api']
+SENSITIVE_KEYS = ["PASSWORD","API","PASS","PASSWD","PWD","SECRET","SECRET_KEY","API_KEY","ACCESS_KEY","PRIVATE_KEY","TOKEN","AUTH_TOKEN","JWT_SECRET","DB_PASSWORD","DATABASE_PASSWORD","MYSQL_PASSWORD","POSTGRES_PASSWORD","REDIS_PASSWORD","MONGO_PASSWORD","EMAIL_PASSWORD","SMTP_PASSWORD","AWS_SECRET_ACCESS_KEY","CLIENT_SECRET","ENCRYPTION_KEY","SESSION_SECRET"]
+EMAIL_KEYS = ["EMAIL","EMAIL_ADDRESS","MAIL","MAIL_ADDRESS","ADMIN_EMAIL","SUPPORT_EMAIL","CONTACT_EMAIL""USER_EMAIL","SMTP_EMAIL","SMTP_USER","SMTP_USERNAME","MAIL_USERNAME","MAIL_USER","EMAIL_USER","EMAIL_USERNAME","FROM_EMAIL","NOREPLY_EMAIL","NOREPLY_ADDRESS","ACCOUNT_EMAIL","LOGIN_EMAIL","AUTH_EMAIL"]
 symbols=['&','/','\\','!','-','_','#','@','$','%']
 
 #عرفت ازاي اجيب الداتا من الملف الحمدلله
@@ -37,7 +38,7 @@ for CrD,v in CurrentData.items():
     CheckSymbol = 0
     LowerCount = 0
     UpperCount = 0 
-    if CrD.lower() in secret:
+    if CrD.upper() in SENSITIVE_KEYS or CrD.upper.split("_")[1] in SENSITIVE_KEYS or CrD.upper.split("_")[2] in SENSITIVE_KEYS :
         for l in v:
             if l in symbols:
                 CheckSymbol+=1
@@ -52,7 +53,9 @@ for CrD,v in CurrentData.items():
         if UpperCount == 0 :
             print(f"use an upper case char (preferred) in {CrD}")
         if CheckSymbol == 0:
-            print(f"Add a unique symbol (preferred) in {CrD}")
+            raise Exception(f"Add a unique symbol (preferred) in {CrD}")
         if len(v) < 8:
             raise Exception(f"Password too short in {CrD}")
-        
+    if CrD.upper() in  EMAIL_KEYS:
+        if "@" not in v:
+            raise Exception(f"Enter a valid Email in {CrD}")
