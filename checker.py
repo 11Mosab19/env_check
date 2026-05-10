@@ -18,18 +18,23 @@ for k,v in ExampleData.items():
 print("")
 
 print("------------Data------------")
-
+CounterSame=0
 CurrentData=dotenv_values(find_dotenv(raise_error_if_not_found=True))
 for k,v in CurrentData.items():
     #print(f"{k}=>{v}")#بتاكد ان كل كيي معاه فاليو 
     if v == None:
-        raise Exception (f"Missing key value{k}")
-    
-    
+        print(f"Missing key value{k}")
+    else:
+        CounterSame+=1
     
 for ExD in ExampleData.keys():#بتاكد ان كل كيي مطلوب موجود في فايل ال env
     if ExD not in CurrentData.keys():
-        raise Exception (f"The Key {ExD} Missing in your .env file ") 
+        print(f"The Key {ExD} Missing in your .env file ") 
+    else:
+        CounterSame+=1
+if CounterSame != 0:
+    print("The .env file matches the example ")
+    print("")
     
 for CrD in CurrentData.keys():#بتاكد ان مفيش كيي زياده مكتوب
     if CrD not in ExampleData.keys():
@@ -38,8 +43,9 @@ for CrD,v in CurrentData.items():
     CheckSymbol = 0
     LowerCount = 0
     UpperCount = 0 
+    PasswordWeakCount=0
     words=CrD.upper().split("_")
-    if CrD.upper() in SENSITIVE_KEYS or any(word in SENSITIVE_KEYS for word in words)    :
+    if CrD.upper() in SENSITIVE_KEYS or any(word in SENSITIVE_KEYS for word in words):
         for l in v:
             if l in symbols:
                 CheckSymbol+=1
@@ -48,15 +54,22 @@ for CrD,v in CurrentData.items():
             if l.isupper():
                 UpperCount+=1
         if LowerCount == 0 and UpperCount == 0 :
-            raise Exception (f"You should use chars in {CrD}")
+            print(f"You should use chars in {CrD}")
+            PasswordWeakCount+=1
         if LowerCount == 0:
             print(f"use a lower case char (preferred) in {CrD}")
+            PasswordWeakCount+=1
         if UpperCount == 0 :
             print(f"use an upper case char (preferred) in {CrD}")
+            PasswordWeakCount+=1
         if CheckSymbol == 0:
-            raise Exception(f"Add a unique symbol in {CrD}")
+            print(f"Add a unique symbol in {CrD}")
+            PasswordWeakCount+=1
         if len(v) < 8:
-            raise Exception(f"Password too short in {CrD}")
-    if CrD.upper() in  EMAIL_KEYS:
+            print(f"Password too short in {CrD}")
+            PasswordWeakCount+=1
+        print(f"{PasswordWeakCount} security issues detected in {CrD}")
+        print("")
+    if CrD.upper() in EMAIL_KEYS or any(word in EMAIL_KEYS for word in words):
         if "@" not in v:
-            raise Exception(f"Enter a valid Email in {CrD}")
+            print(f"Enter a valid Email in {CrD}")
