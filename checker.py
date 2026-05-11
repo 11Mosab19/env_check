@@ -86,6 +86,8 @@ for CrD,v in CurrentData.items():
             print("")
 
     if CrD.upper() in EMAIL_KEYS or any(word in EMAIL_KEYS for word in words):
-        console.print("---------Email security report---------",style="bold")
+        console.print("---------Email validation report---------",style="bold")
         if "@" not in v:
             console.print(f"Enter a valid Email in {CrD}",style="bold underline red")
+        else:
+            console.print(f"The Email {CrD} is valid",style="bold green")
