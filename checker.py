@@ -8,35 +8,44 @@ EMAIL_KEYS = ["EMAIL","EMAIL_ADDRESS","MAIL","MAIL_ADDRESS","ADMIN_EMAIL","SUPPO
 symbols=['&','/','\\','!','-','_','#','@','$','%']
 console = Console()
 #عرفت ازاي اجيب الداتا من الملف الحمدلله
-print("------------Example------------")
+CounterSame=0
+ValueEx=0
+CounterSame2=0
+
+console.print("---------check for keys---------",style="bold")
 ExampleData=dotenv_values(find_dotenv("example.env",raise_error_if_not_found=True))
 for k,v in ExampleData.items():
     #print(f"{k}=>{v}")
     #بتاكد ان كل كيي معاه فاليو 
     if v == None:
         raise Exception (f"Missing key value for {k}")
+    else:
+        ValueEx+=1
     
-print("")
-
-print("------------Data------------")
-CounterSame=0
 CurrentData=dotenv_values(find_dotenv(raise_error_if_not_found=True))
 for k,v in CurrentData.items():
     #print(f"{k}=>{v}")#بتاكد ان كل كيي معاه فاليو 
     if v == None:
         print(f"Missing key value{k}")
     else:
-        CounterSame+=1
-    
+        ValueEx+=1
+if ValueEx != 0:
+    console.print("Every key has a value",style="bold green")
+console.print("---------if files matches---------",style="bold")
 for ExD in ExampleData.keys():#بتاكد ان كل كيي مطلوب موجود في فايل ال env
     if ExD not in CurrentData.keys():
-        console.print(f"The Key {ExD} Missing in your .env file ",style="bold underline red") 
-    else:
+        console.print(f"The Key {ExD} Missing in your .env file ",style="bold underline red")
         CounterSame+=1
-if CounterSame != 0:
-    console.print("The .env file matches the example",style="bold green")
-    print("")
+        
+for Crd in CurrentData.keys():
+    if Crd not in ExampleData.keys():
+        console.print(f"The Key {Crd} not required in the example file",style="bold underline red")
+        CounterSame2+=1
+        
+if CounterSame == 0 and CounterSame2 == 0:
+    console.print("The .env file matches the example file",style="bold green")
     
+console.print("---------Password security report---------",style="bold")
 for CrD in CurrentData.keys():#بتاكد ان مفيش كيي زياده مكتوب
     if CrD not in ExampleData.keys():
         console.print(f"the key {CrD} is not required",style="bold underline red")
@@ -71,7 +80,12 @@ for CrD,v in CurrentData.items():
             PasswordWeakCount+=1
         if PasswordWeakCount > 0:
             console.print(f"{PasswordWeakCount} security issues detected in {CrD}",style="bold red")
-        print("")
+            print("")
+        else:
+            console.print(f"No security issues detected in {CrD}",style="bold green")
+            print("")
+
     if CrD.upper() in EMAIL_KEYS or any(word in EMAIL_KEYS for word in words):
+        console.print("---------Email security report---------",style="bold")
         if "@" not in v:
             console.print(f"Enter a valid Email in {CrD}",style="bold underline red")
