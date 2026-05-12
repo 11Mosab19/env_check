@@ -1,8 +1,9 @@
 import os
 from dotenv import load_dotenv , find_dotenv , dotenv_values
 from rich.console import Console
+import argparse
 
-
+parser = argparse.ArgumentParser(description="A simple tool check for .env file and example.env file")
 SENSITIVE_KEYS = ["PASSWORD","API","PASS","PASSWD","PWD","SECRET","SECRET_KEY","API_KEY","ACCESS_KEY","PRIVATE_KEY","TOKEN","AUTH_TOKEN","JWT_SECRET","DB_PASSWORD","DATABASE_PASSWORD","MYSQL_PASSWORD","POSTGRES_PASSWORD","REDIS_PASSWORD","MONGO_PASSWORD","EMAIL_PASSWORD","SMTP_PASSWORD","AWS_SECRET_ACCESS_KEY","CLIENT_SECRET","ENCRYPTION_KEY","SESSION_SECRET"]
 EMAIL_KEYS = ["EMAIL","EMAIL_ADDRESS","MAIL","MAIL_ADDRESS","ADMIN_EMAIL","SUPPORT_EMAIL","CONTACT_EMAIL","USER_EMAIL","SMTP_EMAIL","SMTP_USER","SMTP_USERNAME","MAIL_USERNAME","MAIL_USER","EMAIL_USER","EMAIL_USERNAME","FROM_EMAIL","NOREPLY_EMAIL","NOREPLY_ADDRESS","ACCOUNT_EMAIL","LOGIN_EMAIL","AUTH_EMAIL"]
 symbols=['&','/','\\','!','-','_','#','@','$','%']
@@ -67,10 +68,10 @@ for CrD,v in CurrentData.items():
             console.print(f"You should use chars in {CrD}",style="bold underline red")
             PasswordWeakCount+=1
         if LowerCount == 0:
-            console.print(f"use a lower case char (preferred) in {CrD}",style="bold yellow")
+            console.print(f"use a lowercase char (preferred) in {CrD}",style="bold yellow")
             PasswordWeakCount+=1
         if UpperCount == 0 :
-            console.print(f"use an upper case char (preferred) in {CrD}",style="bold yellow")
+            console.print(f"use an uppercase char (preferred) in {CrD}",style="bold yellow")
             PasswordWeakCount+=1
         if CheckSymbol == 0:
             console.print(f"Add a unique symbol in {CrD}",style="bold underline red")
